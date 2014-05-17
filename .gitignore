@@ -53,3 +53,8 @@ docs/_build/
 
 # vim
 *.swp
+
+# SSL and databases
+*.crt
+*.key
+*.db
