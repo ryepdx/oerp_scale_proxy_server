@@ -54,8 +54,8 @@ def index():
     return "SSL exception added for this session."
 
 
-@auth.login_required
 @jsonrpc.method("weigh")
+@auth.login_required
 def weigh(timeout=None, test_weight=None):
     '''Get a reading from the scale.'''
 
