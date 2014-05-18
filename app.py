@@ -54,6 +54,13 @@ def index():
     return "SSL exception added for this session."
 
 
+@jsonrpc.method("weigh")
+def weigh(timeout=None, test_weight=None):
+    '''Get a reading from the scale.'''
+
+    return SCALE.weigh(timeout=timeout, test_weight=test_weight)
+
+
 if __name__ == "__main__":
     # Setup database
     db = sqlite3.connect(DB)
