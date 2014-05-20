@@ -14,7 +14,7 @@ SCALE = ScaleController()
 
 app = Flask(__name__)
 auth = HTTPBasicAuth()
-jsonrpc = JSONRPC(app, "/api")
+jsonrpc = JSONRPC(app, "/api", decorators=[cross_origin(methods=['POST', 'OPTIONS'])])
 
 
 # Not a route on purpose.
@@ -50,6 +50,7 @@ def verify_pwd(username, password):
 ## Routes & JSON-RPC methods ##
 
 @app.route("/")
+@cross_origin()
 def index():
     return "SSL exception added for this session."
 
