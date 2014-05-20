@@ -8,13 +8,17 @@ from flask_cors import cross_origin
 from flask_jsonrpc import JSONRPC
 from flask.ext.httpauth import HTTPBasicAuth
 from scale import ScaleController
+from header_decorators import json_headers
 
 DB = 'users.db'
 SCALE = ScaleController()
 
 app = Flask(__name__)
 auth = HTTPBasicAuth()
-jsonrpc = JSONRPC(app, "/api", decorators=[cross_origin(methods=['POST', 'OPTIONS'])])
+jsonrpc = JSONRPC(app, "/api", decorators=[
+    cross_origin(methods=['POST', 'OPTIONS'], headers=["accept", "authorization", "content-type"]),
+    json_headers
+])
 
 
 # Not a route on purpose.
