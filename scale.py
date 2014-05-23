@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import time
-from helpers.usbscale.scale import Scale
+from helpers.usbscale.scale import Scale, ConnectionError
 from helpers.usbscale.scale_manager import ScaleManager
 from helpers.usbscale.tests import mocks
 
@@ -30,11 +30,14 @@ class ScaleController():
         if test_weight:
             scale = Scale(device_manager=self.mock_manager)
 
-        weighing = self._weigh(scale, test_weight=test_weight)
-
-        # Loop until we see a change or until the request times out.
-        while time.time() < end_time and weighing == self._last_weighing:
+        try:
             weighing = self._weigh(scale, test_weight=test_weight)
+
+            # Loop until we see a change or until the request times out.
+            while time.time() < end_time and weighing == self._last_weighing:
+                weighing = self._weigh(scale, test_weight=test_weight)
+        except ConnectionError:
+            return {'success': False, 'error': 'Could not connect to scale.'}
 
         if weighing:
             self._last_weighing = weighing
