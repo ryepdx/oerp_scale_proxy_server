@@ -1,7 +1,7 @@
 # Explicit import to enable 'python app.py'
 import __init__ 
 
-import hashlib, uuid, sqlite3
+import argparse, hashlib, uuid, sqlite3
 from OpenSSL import SSL
 from flask import Flask
 from flask_cors import cross_origin
@@ -12,6 +12,12 @@ from header_decorators import json_headers, max_age_headers
 
 DB = 'users.db'
 SCALE = ScaleController()
+
+parser = argparse.ArgumentParser(
+    description='Provide a JSON-RPC proxy for a USB scale.'
+)
+parser.add_argument('--weight', help='a test weight to return instead of doing a real reading')
+args = parser.parse_args()
 
 app = Flask(__name__)
 auth = HTTPBasicAuth()
@@ -64,7 +70,7 @@ def index():
 @auth.login_required
 def weigh(timeout=None, test_weight=None):
     '''Get a reading from the scale.'''
-
+    test_weight = test_weight or args.weight
     return SCALE.weigh(timeout=timeout, test_weight=test_weight)
 
 
