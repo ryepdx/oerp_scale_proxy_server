@@ -17,7 +17,8 @@ SCALE = ScaleController()
 parser = argparse.ArgumentParser(
     description='Provide a JSON-RPC proxy for a USB scale.'
 )
-parser.add_argument('--weight', help='a test weight to return instead of doing a real reading')
+parser.add_argument('-w', '--weight', help='a test weight to return instead of doing a real reading', default=None)
+parser.add_argument('-p', '--port', help='the port to run on', default="443")
 args = parser.parse_args()
 
 app = Flask(__name__)
@@ -89,7 +90,7 @@ def run():
     ssl_context.use_privatekey_file(ROOT_DIR + '/server.key')
     ssl_context.use_certificate_file(ROOT_DIR + '/server.crt')
 
-    app.run(debug=True, ssl_context=ssl_context)
+    app.run(debug=True, ssl_context=ssl_context, port=int(args.port))
 
 if __name__ == "__main__":
     run()
