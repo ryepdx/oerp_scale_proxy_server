@@ -73,8 +73,7 @@ def weigh(timeout=None, test_weight=None):
     test_weight = test_weight or args.weight
     return SCALE.weigh(timeout=timeout, test_weight=test_weight)
 
-
-if __name__ == "__main__":
+def run():
     # Setup database
     db = sqlite3.connect(DB)
     db.cursor().execute('''
@@ -90,3 +89,6 @@ if __name__ == "__main__":
     ssl_context.use_certificate_file('server.crt')
 
     app.run(debug=True, ssl_context=ssl_context)
+
+if __name__ == "__main__":
+    run()
