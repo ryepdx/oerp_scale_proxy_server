@@ -14,6 +14,8 @@ class ScaleController():
         self.mock_endpoint = mocks.usb_lib.MockEndpoint(0, 0)
         self._last_weighing = None
 
+    def disconnect(self):
+        return self.scale.disconnect()
 
     def weigh(self, timeout=None, test_weight=None):
         '''Get a reading from the attached USB scale.'''
