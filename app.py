@@ -13,6 +13,8 @@ from header_decorators import json_headers, max_age_headers
 ROOT_DIR = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 DB = ROOT_DIR + '/users.db'
 SCALE = ScaleController()
+LOGGER = logging.getLogger(__name__)
+LOGGER.setLevel(logging.INFO)
 
 parser = argparse.ArgumentParser(
     description='Provide a JSON-RPC proxy for a USB scale.'
@@ -91,6 +93,17 @@ def run():
     ssl_context.use_certificate_file(ROOT_DIR + '/server.crt')
 
     app.run(debug=True, ssl_context=ssl_context, port=int(args.port))
+
+def cleanup(sig, frame):
+    LOGGER.info("Attempting to release USB connection...")
+
+    if not SCALE.disconnect():
+        sys.exit("ERROR: Unable to release USB connection!")
+    else:
+        sys.exit(0)
+
+# Register our cleanup function.
+signal.signal(signal.SIGINT, cleanup)
 
 if __name__ == "__main__":
     run()
