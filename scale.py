@@ -36,8 +36,8 @@ class ScaleController():
             weighing = self._weigh(scale, test_weight=test_weight)
 
             # Loop until we see a change or until the request times out.
-            while time.time() < end_time and weighing == self._last_weighing:
-                weighing = self._weigh(scale, test_weight=test_weight)
+            #while time.time() < end_time and weighing == self._last_weighing:
+            weighing = self._weigh(scale, test_weight=test_weight)
         except ConnectionError:
             return {'success': False, 'error': 'Could not connect to scale.'}
 
