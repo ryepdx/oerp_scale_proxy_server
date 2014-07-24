@@ -1,7 +1,7 @@
 # Explicit import to enable 'python app.py'
 import __init__ 
 
-import argparse, hashlib, uuid, sqlite3
+import argparse, hashlib, inspect, logging, os, signal, sqlite3, sys, uuid
 from OpenSSL import SSL
 from flask import Flask
 from flask_cors import cross_origin
@@ -10,7 +10,8 @@ from flask.ext.httpauth import HTTPBasicAuth
 from scale import ScaleController
 from header_decorators import json_headers, max_age_headers
 
-DB = 'users.db'
+ROOT_DIR = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+DB = ROOT_DIR + '/users.db'
 SCALE = ScaleController()
 
 parser = argparse.ArgumentParser(
@@ -85,8 +86,8 @@ def run():
 
     # Setup SSL cert
     ssl_context = SSL.Context(SSL.SSLv23_METHOD)
-    ssl_context.use_privatekey_file('server.key')
-    ssl_context.use_certificate_file('server.crt')
+    ssl_context.use_privatekey_file(ROOT_DIR + '/server.key')
+    ssl_context.use_certificate_file(ROOT_DIR + '/server.crt')
 
     app.run(debug=True, ssl_context=ssl_context)
 
