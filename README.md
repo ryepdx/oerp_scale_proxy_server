@@ -36,3 +36,4 @@ This Python script provides a JSON-RPC interface to a USB mail scale. It uses SS
 
     sqlite> .q
 
+
